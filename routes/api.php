@@ -1,18 +1,26 @@
 <?php
 
-use Illuminate\Http\Request;
+$api = app('Dingo\Api\Routing\Router');
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+$api->version('v1',[
+    'namespace'=>'App\Http\Controllers\Api',
+    'middleware'=>['serializer:array','cors']
+],function ($api){
+    $api->get('connection','ConnectionController@connection');
+    $api->post('bind','ConnectionController@bind');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    $api->get('modules','ModulesController@index');
+
+    $api->post('users','UsersController@store')
+        ->name('api.users.store');
+
+    $api->post('authorizations', 'AuthorizationsController@store')
+        ->name('api.authorizations.store');
+
+    // 刷新token
+    $api->put('authorizations/current', 'AuthorizationsController@update')
+        ->name('api.authorizations.update');
+    // 删除token
+    $api->delete('authorizations/current', 'AuthorizationsController@destroy')
+        ->name('api.authorizations.destroy');
 });
