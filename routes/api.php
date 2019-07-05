@@ -9,7 +9,17 @@ $api->version('v1',[
     $api->get('connection','ConnectionController@connection');
     $api->post('bind','ConnectionController@bind');
 
-    $api->get('modules','ModulesController@index');
+    $api->get('modules','ModulesController@index')
+        ->name('api.modules.index');
+
+    $api->get('modules/{module}','ModulesController@show')
+        ->name('api.modules.show');
+
+    $api->post('modules/check','ModulesController@check')
+        ->name('api.modules.check');
+
+    $api->any('downModuleInstall','ModulesController@downModuleInstall')
+        ->name('api.modules.downModuleInstall');
 
     $api->post('users','UsersController@store')
         ->name('api.users.store');

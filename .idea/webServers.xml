@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="a0c2c32f-1526-402c-974b-e4a6e41fff40" name="居委会云平台" url="http://47.92.150.84">
+        <fileTransfer host="47.92.150.84" port="22" rootFolder="/www/wwwroot/committee_cloud" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

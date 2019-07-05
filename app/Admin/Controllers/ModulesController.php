@@ -28,7 +28,6 @@ class ModulesController extends AdminController
 
         $grid->model()->orderBy('sort');
         $grid->column('module_name', __('模块名称'));
-        $grid->column('image', __('图标'))->image();
         $grid->column('is_show', __('是否展示'))->switch();
         $grid->column('sort', __('排序'));
 
@@ -69,10 +68,13 @@ class ModulesController extends AdminController
         $form->text('module_name', __('模块名称'))->rules('required',[
             'required'=>'必填'
         ]);
-        $form->image('image', __('图标'))->rules('required',[
+        $form->text('alias', __('英文别名'))->rules('required',[
             'required'=>'必填'
         ]);
         $form->text('introduction', __('简介'))->rules('required',[
+            'required'=>'必填'
+        ]);
+        $form->text('detail', __('详情'))->rules('required',[
             'required'=>'必填'
         ]);
         $form->switch('is_show', __('是否展示'))->default(0);
@@ -91,6 +93,13 @@ class ModulesController extends AdminController
             $footer->disableCreatingCheck();
 
         });
+
+        $form->saved(function (Form $form) {
+            $modules=$form->model();
+            $modules->identifier=$modules->alias. '.' .str_pad($modules->id,5,STR_PAD_LEFT);
+            $modules->save();
+        });
+
 
         return $form;
     }

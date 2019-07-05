@@ -30,7 +30,7 @@ class ModuleVersionController extends AdminController
 
         $grid->column('module_id', __('模块名称'));
         $grid->column('version', __('版本号'));
-        $grid->column('is_show', __('是否展示'));
+        $grid->column('is_show', __('是否展示'))->switch();
 
 
         return $grid;
@@ -67,10 +67,13 @@ class ModuleVersionController extends AdminController
     {
         $form = new Form(new ModuleVersion);
 
-        $form->select('module_id', __('模块名称'))->options(Module::where('is_show')->pluck('module_name','id'))->rules('required',[
+        $form->select('module_id', __('模块名称'))->options(Module::where('is_show',1)->get()->pluck('module_name','id'))->rules('required',[
             'required'=>'必填'
         ]);
         $form->text('version', __('发布版本号'))->rules('required',[
+            'required'=>'必填'
+        ]);
+        $form->text('frame_version', __('需要框架版本号'))->rules('required',[
             'required'=>'必填'
         ]);
         $form->textarea('introduction', __('版本更新内容'))->rules('required',[

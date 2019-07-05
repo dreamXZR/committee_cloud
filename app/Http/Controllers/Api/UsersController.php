@@ -14,8 +14,10 @@ class UsersController extends Controller
             'name'=>$request->name,
             'email'=>$request->email,
             'password'=>bcrypt($request->password),
-            'committee_name'=>$request->committee_name
+            'committee_name'=>$request->committee_name,
+            'identifier'=>md5(uniqid(microtime(true),true))
         ]);
+
 
         return $this->response->item($user, new UserTransformer())
             ->setMeta([
