@@ -15,6 +15,9 @@ $api->version('v1',[
     $api->get('modules/{module}','ModulesController@show')
         ->name('api.modules.show');
 
+    $api->get('getVersions','VersionsController@getVersion')
+        ->name('api.versions.getVersion');
+
     $api->post('modules/check','ModulesController@check')
         ->name('api.modules.check');
 

@@ -8,6 +8,6 @@ class ModuleVersion extends Model
 {
     public function module()
     {
-        return $this->hasOne(Module::class,'module_id','id');
+        return $this->belongsTo(Module::class,'module_id','id');
     }
 }

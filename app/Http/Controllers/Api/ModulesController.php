@@ -45,7 +45,13 @@ class ModulesController extends Controller
             $module=Module::where('identifier',$module_identifier)->first();
             if($module){
                 $last_module_version=$module->module_versions()->where('is_show',1)->orderBy('id','desc')->first();
-
+                if(!$last_module_version){
+                    $res=[
+                        'code'=>0,
+                        'msg'=>'暂无版本'
+                    ];
+                    return $this->response->array($res);
+                }
                 if(version_compare($frame_version,$last_module_version->frame_version) == -1){
                     $res=[
                         'code'=>0,

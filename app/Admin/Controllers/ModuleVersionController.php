@@ -28,9 +28,17 @@ class ModuleVersionController extends AdminController
         $grid = new Grid(new ModuleVersion);
 
 
-        $grid->column('module_id', __('模块名称'));
-        $grid->column('version', __('版本号'));
-        $grid->column('is_show', __('是否展示'))->switch();
+        $grid->module()->module_name('模块名称');
+        $grid->column('version', '版本号');
+        $grid->column('is_show', '是否展示')->switch();
+        $grid->column('identifier', '身份id');
+
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+            $actions->disableView();
+        });
+        $grid->disableRowSelector();
+        $grid->disableExport();
 
 
         return $grid;
@@ -67,22 +75,28 @@ class ModuleVersionController extends AdminController
     {
         $form = new Form(new ModuleVersion);
 
-        $form->select('module_id', __('模块名称'))->options(Module::where('is_show',1)->get()->pluck('module_name','id'))->rules('required',[
+        $form->select('module_id', '模块名称')->options(Module::where('is_show',1)->get()->pluck('module_name','id'))->rules('required',[
             'required'=>'必填'
         ]);
-        $form->text('version', __('发布版本号'))->rules('required',[
+        $form->text('version', '发布版本号')->rules('required',[
             'required'=>'必填'
         ]);
-        $form->text('frame_version', __('需要框架版本号'))->rules('required',[
+        $form->text('frame_version', '需要框架版本号')->rules('required',[
             'required'=>'必填'
         ]);
-        $form->textarea('introduction', __('版本更新内容'))->rules('required',[
+        $form->text('identifier','身份id')->rules('required',[
+            'required'=>'必填'
+        ])->help('请按照规则填写');
+
+        $form->textarea('introduction', '版本更新内容')->rules('required',[
             'required'=>'必填'
         ]);
-        $form->file('file_path', __('上传打包文件'))->rules('required',[
+        $form->file('file_path', '上传打包文件')->rules('required',[
             'required'=>'必填'
         ]);
-        $form->switch('is_show', __('是否展示'))->default(0);
+        $form->switch('is_show', '是否展示')->default(0);
+
+
 
         $form->footer(function ($footer) {
 

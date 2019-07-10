@@ -27,9 +27,28 @@ class ModulesController extends AdminController
         $grid = new Grid(new Module);
 
         $grid->model()->orderBy('sort');
-        $grid->column('module_name', __('模块名称'));
-        $grid->column('is_show', __('是否展示'))->switch();
-        $grid->column('sort', __('排序'));
+        $grid->column('module_name', '模块名称');
+        $grid->column('is_show', '是否展示')->switch();
+        $grid->column('sort', '排序');
+        $grid->column('identifier', '身份id');
+
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+            $actions->disableView();
+        });
+
+        $grid->filter(function($filter){
+
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+
+            // 在这里添加字段过滤器
+            $filter->like('module_name', '模块名称');
+
+        });
+
+        $grid->disableRowSelector();
+        $grid->disableExport();
 
         return $grid;
     }
@@ -96,7 +115,7 @@ class ModulesController extends AdminController
 
         $form->saved(function (Form $form) {
             $modules=$form->model();
-            $modules->identifier=$modules->alias. '.' .str_pad($modules->id,5,STR_PAD_LEFT);
+            $modules->identifier=$modules->alias. '.' .str_pad($modules->id,4,0,STR_PAD_LEFT);
             $modules->save();
         });
 
