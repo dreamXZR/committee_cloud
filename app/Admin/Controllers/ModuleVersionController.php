@@ -27,11 +27,12 @@ class ModuleVersionController extends AdminController
     {
         $grid = new Grid(new ModuleVersion);
 
+        $grid->model()->orderBy('module_id')->orderBy('identifier','desc');
 
         $grid->module()->module_name('模块名称');
         $grid->column('version', '版本号');
         $grid->column('is_show', '是否展示')->switch();
-        $grid->column('identifier', '身份id');
+        $grid->column('identifier', '身份标识');
 
         $grid->actions(function ($actions) {
             $actions->disableDelete();
@@ -84,14 +85,19 @@ class ModuleVersionController extends AdminController
         $form->text('frame_version', '需要框架版本号')->rules('required',[
             'required'=>'必填'
         ]);
-        $form->text('identifier','身份id')->rules('required',[
+
+        $form->text('identifier','身份标识')->rules('required',[
             'required'=>'必填'
-        ])->help('请按照规则填写');
+        ])->help('唯一标识[必填]，格式：[模块身份id].module');
 
         $form->textarea('introduction', '版本更新内容')->rules('required',[
             'required'=>'必填'
+        ])->help('使用"&&"进行分隔');
+
+        $form->file('upgrade_file_path', '上传升级包文件')->rules('required',[
+            'required'=>'必填'
         ]);
-        $form->file('file_path', '上传打包文件')->rules('required',[
+        $form->file('complete_file_path', '上传完整包文件')->rules('required',[
             'required'=>'必填'
         ]);
         $form->switch('is_show', '是否展示')->default(0);

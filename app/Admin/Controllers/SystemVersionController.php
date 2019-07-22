@@ -26,10 +26,18 @@ class SystemVersionController extends AdminController
     {
         $grid = new Grid(new SystemVersion);
 
+        $grid->model()->orderBy('identifier','desc');
 
         $grid->column('version', __('版本号'));
-
+        $grid->column('identifier', __('身份标识'));
         $grid->column('is_show', __('是否展示'));
+
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+            $actions->disableView();
+        });
+        $grid->disableRowSelector();
+        $grid->disableExport();
 
 
         return $grid;
@@ -68,9 +76,14 @@ class SystemVersionController extends AdminController
         $form->text('version', __('发布版本号'))->rules('required',[
             'required'=>'必填'
         ]);
+        $form->text('identifier', __('身份标识'))->rules('required',[
+            'required'=>'必填'
+        ])->help('唯一标识[必填]，格式：system');
+
         $form->textarea('introduction', __('版本更新内容'))->rules('required',[
             'required'=>'必填'
-        ]);
+        ])->help('使用"&&"进行分隔');
+
         $form->file('file_path', __('上传打包文件'))->rules('required',[
             'required'=>'必填'
         ]);

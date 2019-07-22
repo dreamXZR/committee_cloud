@@ -15,6 +15,7 @@ Route::group([
     $router->resource('modules', ModulesController::class);
     $router->resource('module-versions', ModuleVersionController::class);
     $router->resource('system-versions', SystemVersionController::class);
+    $router->resource('users', UsersController::class);
 
 
 

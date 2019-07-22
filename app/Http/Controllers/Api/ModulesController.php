@@ -14,9 +14,14 @@ class ModulesController extends Controller
         $limit=$request->limit;
         $page=$request->page;
 
-        $modules=Module::where('is_show',1)->orderBy('sort')->paginate($limit);
+        if($limit && $page){
+            $modules=Module::where('is_show',1)->with('module_versions')->orderBy('sort')->paginate($limit);
+            return $this->response->paginator($modules,new ModuleTransformer());
+        }else{
+            $modules=Module::where('is_show',1)->with('module_versions')->orderBy('sort')->get();
+            return $this->response->collection($modules,new ModuleTransformer());
+        }
 
-        return $this->response->paginator($modules,new ModuleTransformer());
     }
 
     public function show(Request $request)
@@ -39,7 +44,10 @@ class ModulesController extends Controller
         $identifier=$request->identifier;
         $frame_version=$request->frame_version;
 
-        $user=User::where('identifier',$identifier)->first();
+        $user=User::where([
+            'identifier'=>$identifier,
+            'status'=>1
+        ])->first();
 
         if($user){
             $module=Module::where('identifier',$module_identifier)->first();
@@ -61,7 +69,7 @@ class ModulesController extends Controller
                     $res=[
                         'code'=>1,
                         'msg'=>'可以安装',
-                        'file_path'=>$last_module_version->file_path
+                        'file_path'=>$last_module_version->complete_file_path
                     ];
                 }
             }else{
@@ -73,7 +81,7 @@ class ModulesController extends Controller
         }else{
             $res=[
                 'code'=>0,
-                'msg'=>'不存在该用户,请重新绑定平台账号'
+                'msg'=>'用户无法使用此操作,请重新绑定平台账号'
             ];
         }
 

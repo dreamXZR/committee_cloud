@@ -14,7 +14,8 @@ class ModuleTransformer extends TransformerAbstract
             'module_name'=>$module->module_name,
             'alias'=>$module->alias,
             'intro'=>$module->introduction,
-            'module_identifier'=>$module->identifier
+            'module_identifier'=>$module->identifier,
+            'last_branch'=>$module->module_versions()->where('is_show',1)->orderBy('id','desc')->first()
         ];
     }
 }

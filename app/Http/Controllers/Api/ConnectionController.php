@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\SystemVersion;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -48,6 +49,12 @@ class ConnectionController extends Controller
 
     public function get_current_version()
     {
-        return '1.0.0';
+        $system_version=SystemVersion::where('is_show',1)->orderBy('id','desc')->first();
+
+        if($system_version){
+            return $system_version->version;
+        }else{
+            return '1.0.0';
+        }
     }
 }
